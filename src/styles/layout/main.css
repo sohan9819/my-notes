@@ -1,0 +1,19 @@
+.main-container {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 15% 85%;
+  grid-template-rows: 1fr;
+  grid-area: 'nav container';
+}
+
+.container {
+  display: grid;
+  grid-area: 'container';
+  background: var(--color-primary);
+  grid-template-rows: 20vh 1fr;
+  grid-template-columns: 1fr;
+  grid-area: 'search-box' 'notes';
+  overflow-y: scroll;
+  /* position: relative; */
+}
