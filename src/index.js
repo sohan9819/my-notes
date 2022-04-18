@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import { makeServer } from './server';
 import { BrowserRouter } from 'react-router-dom';
+import { AuthContextProvider } from './context/context';
 ('react-router-dom');
 import './styles/index.css';
 
@@ -13,7 +14,9 @@ makeServer();
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

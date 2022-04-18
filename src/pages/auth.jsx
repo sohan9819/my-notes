@@ -1,73 +1,30 @@
 import { Link } from 'react-router-dom';
+import { LoginForm, SignupForm } from '../components/components';
+import { useAuthContext } from '../context/context';
 
 export const Auth = () => {
+  const { auth } = useAuthContext();
+
   return (
     <div className='auth__container'>
-      <Link to='/' className='auth__back__button'>
+      <Link to={auth.isAuth ? '/home' : '/auth'} className='auth__back__button'>
         <i class='bx bx-arrow-back'></i> Back to Home{' '}
       </Link>
       <div class='auth__form__wrapper'>
-        <input type='checkbox' id='chk' aria-hidden='true' />
-
-        <div class='signup'>
-          <form>
-            <label className='auth__label' for='chk' aria-hidden='true'>
-              Sign up
-            </label>
-            <input
-              className='auth__input'
-              type='text'
-              name='txt'
-              placeholder='User name'
-              required=''
-            />
-            <input
-              className='auth__input'
-              type='email'
-              name='email'
-              placeholder='Email'
-              required=''
-            />
-            <input
-              className='auth__input'
-              type='password'
-              name='pswd'
-              placeholder='Password'
-              required=''
-            />
-            <input
-              className='auth__input'
-              type='password'
-              name='pswd'
-              placeholder='Confirm Password'
-              required=''
-            />
-            <button className='auth__button'>Sign up</button>
-          </form>
-        </div>
-
-        <div class='login'>
-          <form>
-            <label className='auth__label' for='chk' aria-hidden='true'>
-              Login
-            </label>
-            <input
-              className='auth__input'
-              type='email'
-              name='email'
-              placeholder='Email'
-              required=''
-            />
-            <input
-              className='auth__input'
-              type='password'
-              name='pswd'
-              placeholder='Password'
-              required=''
-            />
-            <button className='auth__button'>Login</button>
-          </form>
-        </div>
+        {auth.isAuth ? (
+          <div className='auth__success_wrapper'>
+            <h1 className='auth__success_msg'>
+              You are logged in successfuly as{' '}
+              <span className='auth__username'>{auth.user}</span>
+            </h1>
+          </div>
+        ) : (
+          <>
+            <input type='checkbox' id='chk' aria-hidden='true' />
+            <SignupForm />
+            <LoginForm />
+          </>
+        )}
       </div>
 
       <div className='social__auth__wrapper'>

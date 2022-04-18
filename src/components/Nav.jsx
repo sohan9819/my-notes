@@ -1,7 +1,9 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../context/context';
 
 export const Nav = () => {
   const navigate = useNavigate();
+  const { isAuth, setAuth } = useAuthContext();
 
   return (
     <nav className='nav'>
@@ -32,17 +34,26 @@ export const Nav = () => {
       </ul>
 
       <div className='nav__icon__container'>
-        <button
-          onClick={() => {
-            navigate('/auth');
-          }}
-          className='nav__login__button'
-        >
-          <i className='bx bx-log-in'></i> Login
-        </button>
-        {/* <button className='nav__login__button'>
-          <i className='bx bx-log-out'></i> Logout
-        </button> */}
+        {isAuth ? (
+          <button
+            onClick={() => {
+              navigate('/auth');
+            }}
+            className='nav__login__button'
+          >
+            <i className='bx bx-log-in'></i> Login
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setAuth({ isAuth: false, token: '', user: '' });
+              navigate('/auth');
+            }}
+            className='nav__login__button'
+          >
+            <i className='bx bx-log-out'></i> Logout
+          </button>
+        )}
       </div>
     </nav>
   );

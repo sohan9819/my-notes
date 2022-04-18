@@ -10,7 +10,7 @@ export const LandingPage = () => {
         </h1>
       </header>
       <article className='landing__article'>
-        <Link to='/home' className='landing__article__button'>
+        <Link to='/auth' className='landing__article__button'>
           Start making notes
         </Link>
       </article>
