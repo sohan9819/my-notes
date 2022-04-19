@@ -47,6 +47,7 @@ export const Nav = () => {
           <button
             onClick={() => {
               setAuth({ isAuth: false, token: '', user: '' });
+              localStorage.clear();
               navigate('/auth');
             }}
             className='nav__login__button'
