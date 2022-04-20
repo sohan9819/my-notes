@@ -20,18 +20,9 @@ html {
   --color-primary: #282a36;
   --color-secondary: #44475a;
   --color-accent: #6272a4;
-  /* --color-accent: #bd93f9; */
   --color-black: #17141d;
   --color-white: #dddddd;
-
-  /* --color-primary: #1d1e24;
-  --color-secondary: #262730;
-  --color-accent: #393c57;
-  --color-white: #dddddd; */
-
-  /* --color-confirm: #00897b;
-  --color-warning: #303f9f;
-  --color-red: #c62828; */
+  --color-red: #ff5555;
 }
 
 body {

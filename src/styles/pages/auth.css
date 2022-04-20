@@ -119,3 +119,29 @@ button:hover {
   color: var(--color-white);
   font-size: 3.4rem;
 }
+
+.auth__success_wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-white);
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.auth__username {
+  font-size: 5rem;
+  color: var(--color-accent);
+}
+
+.errMsg {
+  font-size: 1.4rem;
+  color: var(--color-red);
+  text-align: center;
+}
+
+.offscreen {
+  display: none;
+}
