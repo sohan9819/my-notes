@@ -4,6 +4,7 @@ import {
   NoteInputCard,
   AddNoteButton,
 } from '../components/components';
+import { notesList } from '../utilities/notesList';
 
 export const Home = () => {
   return (

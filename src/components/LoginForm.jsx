@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useAuthContext } from '../context/context';
 import { Login, navigate } from '../utilities/utilities';
 import { Link } from 'react-router-dom';
+import { Auth } from '../pages/auth';
 
 export const LoginForm = () => {
   const [user, setUser] = useState({
@@ -34,7 +35,7 @@ export const LoginForm = () => {
           token: encodedToken,
           user: foundUser.username,
         }));
-        navigate('/home');
+        // navigate('/home');
         console.log('Login successful');
       } else {
         throw new Error('Login failed! Check your filled details.');

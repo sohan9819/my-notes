@@ -10,7 +10,6 @@ export const Notebook = () => {
       </div>
       <div className='notes'>
         <NoteInputCard />
-        <button className='note__create__button'>Create note</button>
       </div>
     </Layout>
   );

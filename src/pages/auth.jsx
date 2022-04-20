@@ -4,6 +4,7 @@ import { useAuthContext } from '../context/context';
 
 export const Auth = () => {
   const { auth } = useAuthContext();
+  88;
 
   return (
     <div className='auth__container'>
