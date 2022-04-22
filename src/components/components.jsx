@@ -4,3 +4,7 @@ export { NoteInputCard } from './NoteInputCard';
 export { AddNoteButton } from './AddNoteButton';
 export { LoginForm } from './LoginForm';
 export { SignupForm } from './SignupForm';
+export { ArchiveNoteCard } from './ArchiveNoteCard';
+export { TrashNoteCard } from './TrashNoteCards';
+export { FavouriteNoteCard } from './FavouriteNoteCard';
+export { NoCards } from './NoCards';

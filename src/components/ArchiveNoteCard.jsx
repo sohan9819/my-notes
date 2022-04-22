@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useNoteContext } from '../context/context';
 
-export const NoteCard = ({
+export const ArchiveNoteCard = ({
   _id,
   title,
   content,
@@ -11,20 +11,42 @@ export const NoteCard = ({
 }) => {
   const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
   const headers = { authorization: authToken };
-  const noteURL = `/api/notes/archives/${_id}`;
+  const restoreArchiveURL = `/api/archives/restore/${_id}`;
+  const deleteNoteURL = `/api/archives/delete/${_id}`;
+
   const { notesDispatch, isNoteInFavourites } = useNoteContext();
 
-  const addToArchive = () => {
+  const restoreFromArchive = () => {
     axios
-      .post(
-        noteURL,
-        { note: { _id, title, content, cardColor, tags, timeStamp } },
-        { headers: headers }
-      )
+      .post(restoreArchiveURL, {}, { headers: headers })
       .then((res) => res.data)
       .then((data) => {
         notesDispatch({ type: 'Add_to_home', payload: data.notes });
         notesDispatch({ type: 'Add_to_archive', payload: data.archives });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteNote = () => {
+    axios
+      .delete(deleteNoteURL, { headers: headers })
+      .then((res) => res.data)
+      .then((data) => {
+        notesDispatch({ type: 'Add_to_archive', payload: data.archives });
+        notesDispatch({
+          type: 'Add_to_trash',
+          payload: {
+            _id,
+            title,
+            content,
+            cardColor,
+            tags,
+            timeStamp,
+          },
+        });
+        notesDispatch({ type: 'Remove_from_favourites', payload: _id });
       })
       .catch((error) => {
         console.log(error);
@@ -75,11 +97,18 @@ export const NoteCard = ({
             )}
           </li>
           <li
-            onClick={addToArchive}
+            onClick={restoreFromArchive}
             style={{ cursor: 'pointer' }}
             className='note__archive'
           >
-            <i className='bx bxs-archive-in'></i>
+            <i className='bx bxs-archive-out'></i>
+          </li>
+          <li
+            onClick={deleteNote}
+            style={{ cursor: 'pointer' }}
+            className='note__trash'
+          >
+            <i className='bx bxs-trash'></i>
           </li>
         </ul>
       </div>

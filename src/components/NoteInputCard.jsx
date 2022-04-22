@@ -14,21 +14,31 @@ export const NoteInputCard = () => {
   const [tags, setTags] = useState([]);
   const [cardColor, setCardColor] = useState('#c8c7fe');
 
+  const setDefaultState = () => {
+    title.current.value = '';
+    content.current.value = '';
+    setTags([]);
+    setCardColor('#c8c7fe');
+  };
+
   const handleOnSubmit = () => {
-    console.log({
-      title: title.current.value,
-      content: content.current.value,
-      tags: tags,
-      cardColor: cardColor,
-      timeStamp: moment().format('LLL'),
-    });
-    addNotes({
-      title: title.current.value,
-      content: content.current.value,
-      tags: tags,
-      cardColor: cardColor,
-      timeStamp: moment().format('LLL'),
-    });
+    if (
+      title.current.value != '' &&
+      content.current.value != '' &&
+      tags.length != 0
+    ) {
+      addNotes({
+        title: title.current.value,
+        content: content.current.value,
+        tags: tags,
+        cardColor: cardColor,
+        timeStamp: moment().format('LLL'),
+      });
+
+      setDefaultState();
+    } else {
+      console.log('Fill all the details');
+    }
   };
 
   const defaultColors = [
@@ -101,7 +111,7 @@ export const NoteInputCard = () => {
                 />
               </div>
             </li>
-            <li className='note__labels'>
+            {/* <li className='note__labels'>
               <i className='bx bx-label'></i>
             </li>
             <li className='note__archive'>
@@ -109,7 +119,7 @@ export const NoteInputCard = () => {
             </li>
             <li className='note__trash'>
               <i className='bx bxs-trash'></i>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

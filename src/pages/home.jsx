@@ -1,13 +1,32 @@
 import { Layout } from '../layouts/layout';
-import {
-  NoteCard,
-  NoteInputCard,
-  AddNoteButton,
-} from '../components/components';
-import { notesList } from '../utilities/notesList';
+import { NoteCard, AddNoteButton, NoCards } from '../components/components';
+import { useNoteContext, useAuthContext } from '../context/context';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { NotAuth } from './NotAuth';
 
 export const Home = () => {
-  return (
+  const { auth } = useAuthContext();
+
+  const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
+  const url = '/api/notes';
+  const headers = { authorization: authToken };
+
+  const { notes, notesDispatch } = useNoteContext();
+
+  useEffect(() => {
+    axios
+      .get(url, { headers: headers })
+      .then((res) => res.data)
+      .then((data) => {
+        notesDispatch({ type: 'Add_to_home', payload: data.notes });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  return auth.isAuth === true ? (
     <Layout>
       <AddNoteButton />
       <div className='search__box__container'>
@@ -25,13 +44,15 @@ export const Home = () => {
         </div>
       </div>
       <div className='notes'>
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
+        {/* NOTE CARDS HERE  */}
+        {notes.notesHome.length != 0 ? (
+          notes.notesHome.map((note) => <NoteCard {...note} />)
+        ) : (
+          <NoCards />
+        )}
       </div>
     </Layout>
+  ) : (
+    <NotAuth />
   );
 };

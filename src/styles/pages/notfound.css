@@ -1,0 +1,30 @@
+.notfound__heading {
+  text-align: center;
+  font-size: 4rem;
+  color: var(--color-white);
+}
+
+.notfound__link {
+  font-size: 2rem;
+  color: var(--color-accent);
+  margin-top: 2rem;
+}
+
+.notfound__link:hover {
+  color: var(--color-primary);
+}
+
+.startTakingNotes {
+  font-size: 1.6rem;
+  color: var(--color-accent);
+  margin-top: 2rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.startTakingNotes:hover {
+  color: var(--color-secondary);
+}

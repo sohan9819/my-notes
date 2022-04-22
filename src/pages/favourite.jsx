@@ -1,11 +1,15 @@
 import { Layout } from '../layouts/layout';
 import {
-  NoteCard,
-  NoteInputCard,
+  FavouriteNoteCard,
   AddNoteButton,
+  NoCards,
 } from '../components/components';
 
+import { useNoteContext } from '../context/context';
+
 export const Favourite = () => {
+  const { notes } = useNoteContext();
+
   return (
     <Layout>
       <AddNoteButton />
@@ -15,12 +19,12 @@ export const Favourite = () => {
         <i className='bx bxs-heart page__title__icon'></i>
       </div>
       <div className='notes'>
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
+        {/* NOTE CARDS HERE */}
+        {notes.notesFavourites.length != 0 ? (
+          notes.notesFavourites.map((note) => <FavouriteNoteCard {...note} />)
+        ) : (
+          <NoCards />
+        )}
       </div>
     </Layout>
   );

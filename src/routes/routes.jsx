@@ -8,6 +8,7 @@ import {
   Archive,
   Deleted,
   Auth,
+  NotFound,
 } from '../pages/pages';
 
 export const PageRoutes = () => {
@@ -21,6 +22,7 @@ export const PageRoutes = () => {
       <Route path='/archive' element={<Archive />} />
       <Route path='/deleted' element={<Deleted />} />
       <Route path='/auth' element={<Auth />} />
+      <Route path='*' element={<NotFound />} />
     </Routes>
   );
 };
