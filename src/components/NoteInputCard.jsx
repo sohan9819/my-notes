@@ -14,6 +14,8 @@ export const NoteInputCard = () => {
   const [tags, setTags] = useState([]);
   const [cardColor, setCardColor] = useState('#c8c7fe');
 
+  const inputError = useRef();
+
   const setDefaultState = () => {
     title.current.value = '';
     content.current.value = '';
@@ -38,6 +40,7 @@ export const NoteInputCard = () => {
       setDefaultState();
     } else {
       console.log('Fill all the details');
+      inputError.current.innerText = 'Please fill all the fileds';
     }
   };
 
@@ -64,12 +67,16 @@ export const NoteInputCard = () => {
 
   return (
     <>
+      <p ref={inputError} className='note__input__error'></p>
       <div style={{ background: cardColor }} className='note__card__input'>
         <div className='note__header'>
           <textarea
             ref={title}
             className='note__title__input'
             placeholder='Note Title'
+            onChange={() => {
+              inputError.current.innerText = '';
+            }}
           ></textarea>
         </div>
         <hr className='note__line' />
@@ -77,6 +84,9 @@ export const NoteInputCard = () => {
           ref={content}
           className='note__content__input'
           placeholder='Note Content'
+          onChange={() => {
+            inputError.current.innerText = '';
+          }}
         ></textarea>
         <div className='note__labels__conatiner'>
           <ReactTagInput
@@ -86,7 +96,10 @@ export const NoteInputCard = () => {
             editable={true}
             readOnly={false}
             removeOnBackspace={true}
-            onChange={(newTags) => setTags(newTags)}
+            onChange={(newTags) => {
+              setTags(newTags);
+              inputError.current.innerText = '';
+            }}
           />
         </div>
         <div className='note__footer'>

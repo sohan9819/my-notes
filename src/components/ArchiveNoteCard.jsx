@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useNoteContext } from '../context/context';
+import { tooltip } from '../utilities/utilities';
 
 export const ArchiveNoteCard = ({
   _id,
@@ -83,7 +84,8 @@ export const ArchiveNoteCard = ({
         <h3 className='note__date'>{timeStamp}</h3>
         <ul className='note__icons'>
           <li className='note__color'>
-            <i class='bx bxs-message-square-edit'></i>
+            <i data-tip data-for='edit' class='bx bxs-message-square-edit'></i>
+            {tooltip('edit', 'Edit')}
           </li>
           <li
             onClick={handleFavourites}
@@ -91,24 +93,27 @@ export const ArchiveNoteCard = ({
             className='note__labels'
           >
             {isNoteInFavourites(_id) ? (
-              <i className='bx bxs-heart'></i>
+              <i data-tip data-for='favs' className='bx bxs-heart'></i>
             ) : (
-              <i className='bx bx-heart'></i>
+              <i data-tip data-for='favs' className='bx bx-heart'></i>
             )}
+            {tooltip('favs', 'Favourite')}
           </li>
           <li
             onClick={restoreFromArchive}
             style={{ cursor: 'pointer' }}
             className='note__archive'
           >
-            <i className='bx bxs-archive-out'></i>
+            <i data-tip data-for='arch' className='bx bxs-archive-out'></i>
+            {tooltip('arch', 'Archive Out')}
           </li>
           <li
             onClick={deleteNote}
             style={{ cursor: 'pointer' }}
             className='note__trash'
           >
-            <i className='bx bxs-trash'></i>
+            <i data-tip data-for='trash' className='bx bxs-trash'></i>
+            {tooltip('trash', 'Move to Trash')}
           </li>
         </ul>
       </div>

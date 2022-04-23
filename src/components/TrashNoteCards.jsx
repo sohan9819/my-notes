@@ -1,5 +1,6 @@
 import { useNoteContext } from '../context/context';
 import axios from 'axios';
+import { tooltip } from '../utilities/utilities';
 
 export const TrashNoteCard = ({
   _id,
@@ -66,7 +67,8 @@ export const TrashNoteCard = ({
             style={{ cursor: 'pointer' }}
             className='note__trash'
           >
-            <i class='fas fa-trash-restore'></i>
+            <i data-tip data-for='trash' class='fas fa-trash-restore'></i>
+            {tooltip('trash', 'Trash restore')}
           </li>
         </ul>
       </div>

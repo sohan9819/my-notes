@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useNoteContext } from '../context/context';
+import { tooltip } from '../utilities/utilities';
 
 export const NoteCard = ({
   _id,
@@ -61,7 +62,8 @@ export const NoteCard = ({
         <h3 className='note__date'>{timeStamp}</h3>
         <ul className='note__icons'>
           <li className='note__color'>
-            <i class='bx bxs-message-square-edit'></i>
+            <i data-tip data-for='edit' class='bx bxs-message-square-edit'></i>
+            {tooltip('edit', 'Edit')}
           </li>
           <li
             onClick={handleFavourites}
@@ -69,17 +71,19 @@ export const NoteCard = ({
             className='note__labels'
           >
             {isNoteInFavourites(_id) ? (
-              <i className='bx bxs-heart'></i>
+              <i data-tip data-for='favs' className='bx bxs-heart'></i>
             ) : (
-              <i className='bx bx-heart'></i>
+              <i data-tip data-for='favs' className='bx bx-heart'></i>
             )}
+            {tooltip('favs', 'Favourite')}
           </li>
           <li
             onClick={addToArchive}
             style={{ cursor: 'pointer' }}
             className='note__archive'
           >
-            <i className='bx bxs-archive-in'></i>
+            <i data-tip data-for='arch' className='bx bxs-archive-in'></i>
+            {tooltip('arch', 'Archive In')}
           </li>
         </ul>
       </div>

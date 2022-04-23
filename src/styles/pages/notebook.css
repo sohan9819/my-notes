@@ -40,3 +40,8 @@
 .note__create__button:hover {
   background: var(--color-secondary);
 }
+
+.note__input__error {
+  font-size: 2rem;
+  color: var(--color-red);
+}
