@@ -25,7 +25,6 @@ export const NoteCard = ({
       .then((res) => res.data)
       .then((data) => {
         notesDispatch({ type: 'Add_to_home', payload: data.notes });
-        notesDispatch({ type: 'Add_to_archive', payload: data.archives });
       })
       .catch((error) => {
         console.log(error);

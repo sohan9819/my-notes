@@ -1,12 +1,14 @@
-import { useState } from 'react';
 // import { Editor, EditorState } from 'draft-js';
 // import 'draft-js/dist/Draft.css';
+import { useState } from 'react';
 import moment from 'moment';
 import ReactTagInput from '@pathofdev/react-tag-input';
 import '@pathofdev/react-tag-input/build/index.css';
 import { BlockPicker } from 'react-color';
 import { useRef } from 'react';
-import { addNotes } from '../utilities/utilities';
+import { notify } from '../utilities/utilities';
+import axios from 'axios';
+import { useNoteContext } from '../context/context';
 
 export const NoteInputCard = () => {
   const title = useRef(null);
@@ -15,6 +17,11 @@ export const NoteInputCard = () => {
   const [cardColor, setCardColor] = useState('#c8c7fe');
 
   const inputError = useRef();
+
+  const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
+  const headers = { authorization: authToken };
+
+  const { notesDispatch } = useNoteContext();
 
   const setDefaultState = () => {
     title.current.value = '';
@@ -29,13 +36,30 @@ export const NoteInputCard = () => {
       content.current.value != '' &&
       tags.length != 0
     ) {
-      addNotes({
-        title: title.current.value,
-        content: content.current.value,
-        tags: tags,
-        cardColor: cardColor,
-        timeStamp: moment().format('LLL'),
-      });
+      axios
+        .post(
+          '/api/notes',
+          {
+            note: {
+              title: title.current.value,
+              content: content.current.value,
+              tags: tags,
+              cardColor: cardColor,
+              timeStamp: moment().format('LLL'),
+            },
+          },
+          { headers: headers }
+        )
+        .then((res) => res.data)
+        .then((data) => {
+          notify('Note created successfully', 'success');
+          notesDispatch({ type: 'Add_to_home', payload: data.notes });
+          console.log(data);
+        })
+        .catch((error) => {
+          notify('Ran out of some error', 'error');
+          console.log(error);
+        });
 
       setDefaultState();
     } else {
@@ -124,15 +148,6 @@ export const NoteInputCard = () => {
                 />
               </div>
             </li>
-            {/* <li className='note__labels'>
-              <i className='bx bx-label'></i>
-            </li>
-            <li className='note__archive'>
-              <i className='bx bxs-archive-in'></i>
-            </li>
-            <li className='note__trash'>
-              <i className='bx bxs-trash'></i>
-            </li> */}
           </ul>
         </div>
       </div>
