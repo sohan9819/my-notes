@@ -1,12 +1,14 @@
-import { useState } from 'react';
 // import { Editor, EditorState } from 'draft-js';
 // import 'draft-js/dist/Draft.css';
+import { useState } from 'react';
 import moment from 'moment';
 import ReactTagInput from '@pathofdev/react-tag-input';
 import '@pathofdev/react-tag-input/build/index.css';
 import { BlockPicker } from 'react-color';
 import { useRef } from 'react';
-import { addNotes } from '../utilities/utilities';
+import { notify } from '../utilities/utilities';
+import axios from 'axios';
+import { useNoteContext } from '../context/context';
 
 export const NoteInputCard = () => {
   const title = useRef(null);
@@ -14,21 +16,56 @@ export const NoteInputCard = () => {
   const [tags, setTags] = useState([]);
   const [cardColor, setCardColor] = useState('#c8c7fe');
 
+  const inputError = useRef();
+
+  const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
+  const headers = { authorization: authToken };
+
+  const { notesDispatch } = useNoteContext();
+
+  const setDefaultState = () => {
+    title.current.value = '';
+    content.current.value = '';
+    setTags([]);
+    setCardColor('#c8c7fe');
+  };
+
   const handleOnSubmit = () => {
-    console.log({
-      title: title.current.value,
-      content: content.current.value,
-      tags: tags,
-      cardColor: cardColor,
-      timeStamp: moment().format('LLL'),
-    });
-    addNotes({
-      title: title.current.value,
-      content: content.current.value,
-      tags: tags,
-      cardColor: cardColor,
-      timeStamp: moment().format('LLL'),
-    });
+    if (
+      title.current.value != '' &&
+      content.current.value != '' &&
+      tags.length != 0
+    ) {
+      axios
+        .post(
+          '/api/notes',
+          {
+            note: {
+              title: title.current.value,
+              content: content.current.value,
+              tags: tags,
+              cardColor: cardColor,
+              timeStamp: moment().format('LLL'),
+            },
+          },
+          { headers: headers }
+        )
+        .then((res) => res.data)
+        .then((data) => {
+          notify('Note created successfully', 'success');
+          notesDispatch({ type: 'Add_to_home', payload: data.notes });
+          console.log(data);
+        })
+        .catch((error) => {
+          notify('Ran out of some error', 'error');
+          console.log(error);
+        });
+
+      setDefaultState();
+    } else {
+      console.log('Fill all the details');
+      inputError.current.innerText = 'Please fill all the fileds';
+    }
   };
 
   const defaultColors = [
@@ -54,12 +91,16 @@ export const NoteInputCard = () => {
 
   return (
     <>
+      <p ref={inputError} className='note__input__error'></p>
       <div style={{ background: cardColor }} className='note__card__input'>
         <div className='note__header'>
           <textarea
             ref={title}
             className='note__title__input'
             placeholder='Note Title'
+            onChange={() => {
+              inputError.current.innerText = '';
+            }}
           ></textarea>
         </div>
         <hr className='note__line' />
@@ -67,6 +108,9 @@ export const NoteInputCard = () => {
           ref={content}
           className='note__content__input'
           placeholder='Note Content'
+          onChange={() => {
+            inputError.current.innerText = '';
+          }}
         ></textarea>
         <div className='note__labels__conatiner'>
           <ReactTagInput
@@ -76,7 +120,10 @@ export const NoteInputCard = () => {
             editable={true}
             readOnly={false}
             removeOnBackspace={true}
-            onChange={(newTags) => setTags(newTags)}
+            onChange={(newTags) => {
+              setTags(newTags);
+              inputError.current.innerText = '';
+            }}
           />
         </div>
         <div className='note__footer'>
@@ -100,15 +147,6 @@ export const NoteInputCard = () => {
                   onChangeComplete={colorChangeHandler}
                 />
               </div>
-            </li>
-            <li className='note__labels'>
-              <i className='bx bx-label'></i>
-            </li>
-            <li className='note__archive'>
-              <i className='bx bxs-archive-in'></i>
-            </li>
-            <li className='note__trash'>
-              <i className='bx bxs-trash'></i>
             </li>
           </ul>
         </div>

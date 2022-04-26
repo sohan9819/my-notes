@@ -1,8 +1,6 @@
-import axios from 'axios';
 import { useNoteContext } from '../context/context';
-import { tooltip } from '../utilities/utilities';
 
-export const NoteCard = ({
+export const FavouriteNoteCard = ({
   _id,
   title,
   content,
@@ -10,26 +8,7 @@ export const NoteCard = ({
   tags,
   timeStamp,
 }) => {
-  const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
-  const headers = { authorization: authToken };
-  const noteURL = `/api/notes/archives/${_id}`;
   const { notesDispatch, isNoteInFavourites } = useNoteContext();
-
-  const addToArchive = () => {
-    axios
-      .post(
-        noteURL,
-        { note: { _id, title, content, cardColor, tags, timeStamp } },
-        { headers: headers }
-      )
-      .then((res) => res.data)
-      .then((data) => {
-        notesDispatch({ type: 'Add_to_home', payload: data.notes });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   const handleFavourites = () => {
     isNoteInFavourites(_id)
@@ -60,29 +39,16 @@ export const NoteCard = ({
       <div className='note__footer'>
         <h3 className='note__date'>{timeStamp}</h3>
         <ul className='note__icons'>
-          <li className='note__color'>
-            <i data-tip data-for='edit' class='bx bxs-message-square-edit'></i>
-            {tooltip('edit', 'Edit')}
-          </li>
           <li
             onClick={handleFavourites}
             style={{ cursor: 'pointer' }}
             className='note__labels'
           >
             {isNoteInFavourites(_id) ? (
-              <i data-tip data-for='favs' className='bx bxs-heart'></i>
+              <i className='bx bxs-heart'></i>
             ) : (
-              <i data-tip data-for='favs' className='bx bx-heart'></i>
+              <i className='bx bx-heart'></i>
             )}
-            {tooltip('favs', 'Favourite')}
-          </li>
-          <li
-            onClick={addToArchive}
-            style={{ cursor: 'pointer' }}
-            className='note__archive'
-          >
-            <i data-tip data-for='arch' className='bx bxs-archive-in'></i>
-            {tooltip('arch', 'Archive In')}
           </li>
         </ul>
       </div>
