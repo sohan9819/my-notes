@@ -10,7 +10,7 @@ export const Nav = () => {
       <ul className='nav__links-list'>
         <NavLink to='/' className='nav__link'>
           <i className='bx bxs-edit-alt nav__logo'></i>
-          <h2>TipTap Notes</h2>
+          <h3>TipTap Notes</h3>
         </NavLink>
 
         <NavLink to='/home' className='nav__link'>

@@ -1,34 +1,21 @@
-import axios from 'axios';
-import { useNoteContext } from '../context/context';
-import { tooltip } from '../utilities/utilities';
+import { useNoteContext, useAuthContext } from '../context/context';
+import { tooltip, notify, archiveNote } from '../utilities/utilities';
 import { Link } from 'react-router-dom';
 
-export const NoteCard = ({
-  _id,
-  title,
-  content,
-  cardColor,
-  tags,
-  timeStamp,
-}) => {
-  const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
-  const headers = { authorization: authToken };
-  const noteURL = `/api/notes/archives/${_id}`;
+export const NoteCard = (note) => {
+  const { _id, title, content, cardColor, tags, timeStamp } = note;
+  const { auth } = useAuthContext();
   const { notesDispatch, isNoteInFavourites } = useNoteContext();
 
   const addToArchive = () => {
-    axios
-      .post(
-        noteURL,
-        { note: { _id, title, content, cardColor, tags, timeStamp } },
-        { headers: headers }
-      )
-      .then((res) => res.data)
-      .then((data) => {
-        notesDispatch({ type: 'Add_to_home', payload: data.notes });
+    archiveNote(note, auth)
+      .then((notes) => {
+        notesDispatch({ type: 'Add_to_home', payload: notes });
+        notify('Note moved to archive', 'success');
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
+        notify('Unable to move the card to archive', 'error');
       });
   };
 

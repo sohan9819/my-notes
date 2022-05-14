@@ -64,7 +64,6 @@ export const NoteEditForm = (note) => {
           notesDispatch({ type: 'Add_to_home', payload: notes });
           notify('Note edited successfully', 'success');
           navigate('/home');
-          console.log(notes);
         })
         .catch((error) => {
           console.log(error);

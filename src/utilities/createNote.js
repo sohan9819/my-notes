@@ -1,23 +1,19 @@
 import axios from 'axios';
 
-export const editNote = (note, auth) => {
+export const createNote = (note, headers) => {
   return axios
     .post(
-      `/api/notes/${note._id}`,
+      '/api/notes',
       {
         note: note,
       },
-      {
-        headers: {
-          authorization: auth.token,
-        },
-      }
+      { headers: headers }
     )
     .then((res) => res.data)
     .then((data) => {
       return data.notes;
     })
     .catch((error) => {
-      return error.reponse;
+      return error.response;
     });
 };

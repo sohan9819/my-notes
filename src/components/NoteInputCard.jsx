@@ -6,62 +6,43 @@ import ReactTagInput from '@pathofdev/react-tag-input';
 import '@pathofdev/react-tag-input/build/index.css';
 import { BlockPicker } from 'react-color';
 import { useRef } from 'react';
-import { notify } from '../utilities/utilities';
-import axios from 'axios';
+import { notify, createNote } from '../utilities/utilities';
 import { useNoteContext } from '../context/context';
+import { useNavigate } from 'react-router-dom';
 
 export const NoteInputCard = () => {
-  const title = useRef(null);
-  const content = useRef(null);
   const [tags, setTags] = useState([]);
   const [cardColor, setCardColor] = useState('#c8c7fe');
-
+  const { notesDispatch } = useNoteContext();
+  const navigate = useNavigate();
   const inputError = useRef();
-
   const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
   const headers = { authorization: authToken };
 
-  const { notesDispatch } = useNoteContext();
-
-  const setDefaultState = () => {
-    title.current.value = '';
-    content.current.value = '';
-    setTags([]);
-    setCardColor('#c8c7fe');
-  };
-
-  const handleOnSubmit = () => {
-    if (
-      title.current.value != '' &&
-      content.current.value != '' &&
-      tags.length != 0
-    ) {
-      axios
-        .post(
-          '/api/notes',
-          {
-            note: {
-              title: title.current.value,
-              content: content.current.value,
-              tags: tags,
-              cardColor: cardColor,
-              timeStamp: moment().format('LLL'),
-            },
-          },
-          { headers: headers }
-        )
-        .then((res) => res.data)
-        .then((data) => {
+  const onSubmitHandler = (evt) => {
+    evt.preventDefault();
+    const title = evt.target.elements.title;
+    const content = evt.target.elements.content;
+    if (title.value != '' && content.value != '' && tags.length != 0) {
+      createNote(
+        {
+          title: title.value,
+          content: content.value,
+          tags: tags,
+          cardColor: cardColor,
+          timeStamp: moment().format('LLL'),
+        },
+        headers
+      )
+        .then((notes) => {
+          notesDispatch({ type: 'Add_to_home', payload: notes });
           notify('Note created successfully', 'success');
-          notesDispatch({ type: 'Add_to_home', payload: data.notes });
-          console.log(data);
+          navigate('/home');
         })
         .catch((error) => {
           notify('Ran out of some error', 'error');
           console.log(error);
         });
-
-      setDefaultState();
     } else {
       console.log('Fill all the details');
       inputError.current.innerText = 'Please fill all the fileds';
@@ -92,68 +73,70 @@ export const NoteInputCard = () => {
   return (
     <>
       <p ref={inputError} className='note__input__error'></p>
-      <div style={{ background: cardColor }} className='note__card__input'>
-        <div className='note__header'>
+      <form onSubmit={onSubmitHandler} className='note__create__form'>
+        <div style={{ background: cardColor }} className='note__card__input'>
+          <div className='note__header'>
+            <textarea
+              name='title'
+              className='note__title__input'
+              placeholder='Note Title'
+              onChange={() => {
+                inputError.current.innerText = '';
+              }}
+            ></textarea>
+          </div>
+          <hr className='note__line' />
           <textarea
-            ref={title}
-            className='note__title__input'
-            placeholder='Note Title'
+            name='content'
+            className='note__content__input'
+            placeholder='Note Content'
             onChange={() => {
               inputError.current.innerText = '';
             }}
           ></textarea>
-        </div>
-        <hr className='note__line' />
-        <textarea
-          ref={content}
-          className='note__content__input'
-          placeholder='Note Content'
-          onChange={() => {
-            inputError.current.innerText = '';
-          }}
-        ></textarea>
-        <div className='note__labels__conatiner'>
-          <ReactTagInput
-            tags={tags}
-            placeholder='Type and press enter'
-            maxTags={10}
-            editable={true}
-            readOnly={false}
-            removeOnBackspace={true}
-            onChange={(newTags) => {
-              setTags(newTags);
-              inputError.current.innerText = '';
-            }}
-          />
-        </div>
-        <div className='note__footer'>
-          <h3 className='note__date'>{moment().format('LLL')}</h3>
-          <ul className='note__icons'>
-            <li
-              className='note__color'
-              style={{
-                position: 'relative',
+          <div className='note__labels__conatiner'>
+            <ReactTagInput
+              tags={tags}
+              placeholder='Type and press enter'
+              maxTags={10}
+              editable={true}
+              readOnly={false}
+              removeOnBackspace={true}
+              onChange={(newTags) => {
+                setTags(newTags);
+                inputError.current.innerText = '';
               }}
-            >
-              <input type='checkbox' id='colorInput'></input>
-              <label
-                htmlFor='colorInput'
-                className='bx bx-palette colorInputLabel'
-              ></label>
-              <div className='color__tool__tip'>
-                <BlockPicker
-                  color={cardColor}
-                  colors={defaultColors}
-                  onChangeComplete={colorChangeHandler}
-                />
-              </div>
-            </li>
-          </ul>
+            />
+          </div>
+          <div className='note__footer'>
+            <h3 className='note__date'>{moment().format('LLL')}</h3>
+            <ul className='note__icons'>
+              <li
+                className='note__color'
+                style={{
+                  position: 'relative',
+                }}
+              >
+                <input type='checkbox' id='colorInput'></input>
+                <label
+                  htmlFor='colorInput'
+                  className='bx bx-palette colorInputLabel'
+                ></label>
+                <div className='color__tool__tip'>
+                  <BlockPicker
+                    color={cardColor}
+                    colors={defaultColors}
+                    onChangeComplete={colorChangeHandler}
+                  />
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-      <button onClick={handleOnSubmit} className='note__create__button'>
-        Create note
-      </button>
+        <button className='note__create__button' type='submit'>
+          Create note
+        </button>
+      </form>
     </>
   );
 };

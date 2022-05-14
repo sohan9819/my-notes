@@ -28,7 +28,6 @@
   font-size: 1.6rem;
   transition: 0.2s ease;
   color: var(--color-white);
-  /* background: linear-gradient(to right, #7a83b2, #41477e); */
   background: var(--color-accent);
 }
 
@@ -37,7 +36,7 @@
 }
 
 .nav__logo {
-  font-size: 4rem;
+  font-size: 2rem;
 }
 
 .nav__link {

@@ -183,3 +183,13 @@
 #colorInput:checked ~ .color__tool__tip {
   display: block;
 }
+
+.note__create__form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.4em;
+  flex-wrap: nowrap;
+}
