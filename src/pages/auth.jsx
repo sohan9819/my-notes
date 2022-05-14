@@ -8,14 +8,16 @@ export const Auth = () => {
 
   return (
     <div className='auth__container'>
-      <Link to={auth.isAuth ? '/home' : '/auth'} className='auth__back__button'>
-        <i class='bx bx-arrow-back'></i> Back to Home{' '}
+      <Link to='/' className='auth__home'>
+        <h2>
+          <i className='bx bxs-edit-alt'></i>TipTap Notes
+        </h2>
       </Link>
       <div class='auth__form__wrapper'>
         {auth.isAuth ? (
           <div className='auth__success_wrapper'>
             <h1 className='auth__success_msg'>
-              You are logged in successfuly as{' '}
+              You are logged in successfuly as
               <span className='auth__username'>{auth.user}</span>
             </h1>
           </div>

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useNoteContext } from '../context/context';
 import { tooltip } from '../utilities/utilities';
+import { Link } from 'react-router-dom';
 
 export const NoteCard = ({
   _id,
@@ -62,7 +63,12 @@ export const NoteCard = ({
         <h3 className='note__date'>{timeStamp}</h3>
         <ul className='note__icons'>
           <li className='note__color'>
-            <i data-tip data-for='edit' class='bx bxs-message-square-edit'></i>
+            <Link
+              to={`/home/edit/${_id}`}
+              data-tip
+              data-for='edit'
+              class='bx bxs-message-square-edit'
+            ></Link>
             {tooltip('edit', 'Edit')}
           </li>
           <li

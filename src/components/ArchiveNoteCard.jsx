@@ -83,10 +83,10 @@ export const ArchiveNoteCard = ({
       <div className='note__footer'>
         <h3 className='note__date'>{timeStamp}</h3>
         <ul className='note__icons'>
-          <li className='note__color'>
+          {/* <li className='note__color'>
             <i data-tip data-for='edit' class='bx bxs-message-square-edit'></i>
             {tooltip('edit', 'Edit')}
-          </li>
+          </li> */}
           <li
             onClick={handleFavourites}
             style={{ cursor: 'pointer' }}
