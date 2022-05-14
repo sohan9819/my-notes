@@ -50,7 +50,8 @@ export const NoteCard = ({
       </div>
       <hr className='note__line' />
       <p className='note__content__sneak'>
-        {content.length < 40 ? content : `${content.slice(0, 40)}...`}
+        {/* {content.length < 40 ? content : `${content.slice(0, 40)}...`} */}
+        {content}
       </p>
       <div className='note__labels__conatiner'>
         {tags.lenght != 0
