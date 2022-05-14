@@ -1,56 +1,38 @@
 import axios from 'axios';
-import { useNoteContext } from '../context/context';
-import { tooltip } from '../utilities/utilities';
+import { useNoteContext, useAuthContext } from '../context/context';
+import {
+  tooltip,
+  notify,
+  restoreArchive,
+  deleteNote,
+} from '../utilities/utilities';
 
-export const ArchiveNoteCard = ({
-  _id,
-  title,
-  content,
-  cardColor,
-  tags,
-  timeStamp,
-}) => {
-  const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
-  const headers = { authorization: authToken };
-  const restoreArchiveURL = `/api/archives/restore/${_id}`;
-  const deleteNoteURL = `/api/archives/delete/${_id}`;
+export const ArchiveNoteCard = (note) => {
+  const { _id, title, content, cardColor, tags, timeStamp } = note;
+  const { auth } = useAuthContext();
 
   const { notesDispatch, isNoteInFavourites } = useNoteContext();
 
   const restoreFromArchive = () => {
-    axios
-      .post(restoreArchiveURL, {}, { headers: headers })
-      .then((res) => res.data)
-      .then((data) => {
-        notesDispatch({ type: 'Add_to_home', payload: data.notes });
-        notesDispatch({ type: 'Add_to_archive', payload: data.archives });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    restoreArchive(note, auth).then((data) => {
+      notesDispatch({ type: 'Add_to_home', payload: data.notes });
+      notesDispatch({ type: 'Add_to_archive', payload: data.archives });
+    });
   };
 
-  const deleteNote = () => {
-    axios
-      .delete(deleteNoteURL, { headers: headers })
-      .then((res) => res.data)
-      .then((data) => {
-        notesDispatch({ type: 'Add_to_archive', payload: data.archives });
+  const deleteFromArchive = () => {
+    deleteNote(note, auth)
+      .then((archives) => {
+        notesDispatch({ type: 'Add_to_archive', payload: archives });
         notesDispatch({
           type: 'Add_to_trash',
-          payload: {
-            _id,
-            title,
-            content,
-            cardColor,
-            tags,
-            timeStamp,
-          },
+          payload: note,
         });
-        notesDispatch({ type: 'Remove_from_favourites', payload: _id });
+        notesDispatch({ type: 'Remove_from_favourites', payload: note._id });
+        notify('Note deleted sucessfully', 'success');
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -83,10 +65,6 @@ export const ArchiveNoteCard = ({
       <div className='note__footer'>
         <h3 className='note__date'>{timeStamp}</h3>
         <ul className='note__icons'>
-          <li className='note__color'>
-            <i data-tip data-for='edit' class='bx bxs-message-square-edit'></i>
-            {tooltip('edit', 'Edit')}
-          </li>
           <li
             onClick={handleFavourites}
             style={{ cursor: 'pointer' }}
@@ -108,7 +86,7 @@ export const ArchiveNoteCard = ({
             {tooltip('arch', 'Archive Out')}
           </li>
           <li
-            onClick={deleteNote}
+            onClick={deleteFromArchive}
             style={{ cursor: 'pointer' }}
             className='note__trash'
           >

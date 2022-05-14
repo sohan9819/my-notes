@@ -8,9 +8,10 @@ export const Nav = () => {
   return (
     <nav className='nav'>
       <ul className='nav__links-list'>
-        <div className='nav__usr__profile'>
-          <i className='bx bx-user-circle usr__default__avatar'></i>
-        </div>
+        <NavLink to='/' className='nav__link'>
+          <i className='bx bxs-edit-alt nav__logo'></i>
+          <h3>TipTap Notes</h3>
+        </NavLink>
 
         <NavLink to='/home' className='nav__link'>
           <i className='bx bxs-home-alt-2'></i>Home

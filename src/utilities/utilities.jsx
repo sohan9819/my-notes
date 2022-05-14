@@ -1,7 +1,12 @@
 export { Signup } from './Signup';
 export { Login } from './Login';
-export { navigate } from './navigate';
 export { emoji } from './emoji';
 export { tooltip } from './tooltip';
 export { notify } from './toastNotify';
 export { search, sort } from './filterFunctions';
+export { editNote } from './editNote';
+export { createNote } from './createNote';
+export { archiveNote } from './archiveNote';
+export { deleteNote } from './deleteNote';
+export { restoreArchive } from './restoreArchive';
+export { restoreTrash } from './restoreTrash';

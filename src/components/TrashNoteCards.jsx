@@ -1,44 +1,46 @@
-import { useNoteContext } from '../context/context';
+import { useNoteContext, useAuthContext } from '../context/context';
 import axios from 'axios';
-import { tooltip } from '../utilities/utilities';
+import { tooltip, notify, restoreTrash } from '../utilities/utilities';
 
-export const TrashNoteCard = ({
-  _id,
-  title,
-  content,
-  cardColor,
-  tags,
-  timeStamp,
-}) => {
-  const authToken = JSON.parse(localStorage.getItem('AUTH_TOKEN'));
-  const headers = { authorization: authToken };
-  const url = '/api/notes';
+export const TrashNoteCard = (note) => {
+  const { auth } = useAuthContext();
   const { notesDispatch } = useNoteContext();
+  const { _id, title, content, cardColor, tags, timeStamp } = note;
 
   const restoreFromTrash = () => {
-    axios
-      .post(
-        url,
-        {
-          note: {
-            title: title,
-            content: content,
-            tags: tags,
-            cardColor: cardColor,
-            timeStamp: timeStamp + ' (restored)',
-          },
-        },
-        {
-          headers: headers,
-        }
-      )
-      .then((res) => res.data)
-      .then((data) => {
-        notesDispatch({ type: 'Add_to_home', payload: data.notes });
-        notesDispatch({ type: 'Remove_from_trash', payload: _id });
+    // axios
+    //   .post(
+    //     url,
+    //     {
+    //       note: {
+    //         title: title,
+    //         content: content,
+    //         tags: tags,
+    //         cardColor: cardColor,
+    //         timeStamp: timeStamp + ' (restored)',
+    //       },
+    //     },
+    //     {
+    //       headers: headers,
+    //     }
+    //   )
+    //   .then((res) => res.data)
+    //   .then((data) => {
+    //     notesDispatch({ type: 'Add_to_home', payload: data.notes });
+    //     notesDispatch({ type: 'Remove_from_trash', payload: _id });
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    restoreTrash(note, auth)
+      .then((notes) => {
+        notesDispatch({ type: 'Add_to_home', payload: notes });
+        notesDispatch({ type: 'Remove_from_trash', payload: note._id });
+        notify('Restored from trash successfully', 'seccess');
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
+        notify('Unable to restore from trash', 'error');
       });
   };
 

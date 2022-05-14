@@ -28,7 +28,6 @@
   font-size: 1.6rem;
   transition: 0.2s ease;
   color: var(--color-white);
-  /* background: linear-gradient(to right, #7a83b2, #41477e); */
   background: var(--color-accent);
 }
 
@@ -36,23 +35,8 @@
   background: var(--color-primary);
 }
 
-.nav__usr__profile {
-  height: 8rem;
-  width: 8rem;
-  cursor: pointer;
-  padding: 0.8rem 1.4rem;
-  border-radius: 50%;
-  font-size: 1.6rem;
-  transition: 0.2s ease;
-  color: var(--color-white);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--color-primary);
-}
-
-.usr__default__avatar {
-  font-size: 6rem;
+.nav__logo {
+  font-size: 2rem;
 }
 
 .nav__link {

@@ -1,8 +1,7 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuthContext } from '../context/context';
-import { Login, navigate } from '../utilities/utilities';
-import { Link } from 'react-router-dom';
-import { Auth } from '../pages/auth';
+import { Login } from '../utilities/utilities';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const LoginForm = () => {
   const [user, setUser] = useState({
@@ -17,7 +16,8 @@ export const LoginForm = () => {
 
   const [errMsg, setErrMsg] = useState('');
 
-  const { setAuth, setUserState } = useAuthContext();
+  const { setAuth } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleOnSubmit = (evt) => {
     evt.preventDefault();

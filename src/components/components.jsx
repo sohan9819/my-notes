@@ -8,3 +8,4 @@ export { ArchiveNoteCard } from './ArchiveNoteCard';
 export { TrashNoteCard } from './TrashNoteCards';
 export { FavouriteNoteCard } from './FavouriteNoteCard';
 export { NoCards } from './NoCards';
+export { NoteEditForm } from './NoteEditForm';
